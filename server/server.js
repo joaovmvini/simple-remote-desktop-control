@@ -6,7 +6,7 @@ const { Server } = require('socket.io');
 const io = new Server(server);
 
 const ioc = require('socket.io-client');
-const remoteSocket =  ioc.connect('192.168.2.111:8080', { reconnection: true });
+const remoteSocket =  ioc.connect('http://f89c-177-12-101-74.ngrok.io', { reconnection: true });
 
 app.use(express.static('../public'));
 

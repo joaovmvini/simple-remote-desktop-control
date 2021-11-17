@@ -7,7 +7,7 @@ const server = http.createServer(app);
 const { Server } = require('socket.io');
 const io = new Server(server);
 
-const remoteSocket = ioc.connect('192.168.2.109:3000', { reconnection: true });
+const remoteSocket = ioc.connect('http://bd9d-177-12-101-74.ngrok.io', { reconnection: true });
 
 const ScreenSharer = require('./screen_sharer/sharer');
 const sharer = new ScreenSharer(remoteSocket, 1);
