@@ -5,17 +5,23 @@ const server = http.createServer(app);
 const { Server } = require('socket.io');
 const io = new Server(server);
 
-const ScreenSharer = require('../screen_sharer/sharer');
-const sharer = new ScreenSharer(io, 1);
+const ioc = require('socket.io-client');
+const remoteSocket =  ioc.connect('http://localhost:8080', { reconnection: true });
 
-const EventHandler = require('../event_handler/index');
-const eventHandler = new EventHandler(io);
-
-app.use(express.static('../desktop_control'));
+app.use(express.static('../public'));
 
 io.on('connection', (socket) => {
-    sharer.start();
-    eventHandler.start();
+   socket.on('SCREEN_IMAGE', (content) => {
+        io.emit('SCREEN_IMAGE', content);
+   });
+
+   socket.on('MOUSE_MOVE', (coords) => {
+        io.emit('MOUSE_MOVE', coords);
+   });
+
+   socket.on('SCREEN_DIMENSIONS', (dimensions) => {
+        io.emit('SCREEN_DIMENSIONS', dimensions);
+   });
 });
 
 server.listen(3000, () => {
