@@ -22,7 +22,7 @@ io.on('connection', (socket) => {
    eventHandler.start();
 });
 
-server.listen(8080, '192.168.2.111', () => {
+server.listen(8080, () => {
     console.log('listening on *:8080');
 });
 
