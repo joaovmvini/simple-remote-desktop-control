@@ -7,7 +7,7 @@ const server = http.createServer(app);
 const { Server } = require('socket.io');
 const io = new Server(server);
 
-const remoteSocket = ioc.connect('http://localhost:3000', { reconnection: true });
+const remoteSocket = ioc.connect('192.168.2.109:3000', { reconnection: true });
 
 const ScreenSharer = require('./screen_sharer/sharer');
 const sharer = new ScreenSharer(remoteSocket, 1);
@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
    eventHandler.start();
 });
 
-server.listen('8080', () => {
+server.listen(8080, '0.0.0.0', () => {
     console.log('listening on *:8080');
 });
 

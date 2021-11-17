@@ -6,7 +6,7 @@ const { Server } = require('socket.io');
 const io = new Server(server);
 
 const ioc = require('socket.io-client');
-const remoteSocket =  ioc.connect('http://localhost:8080', { reconnection: true });
+const remoteSocket =  ioc.connect('192.168.56.1:8080', { reconnection: true });
 
 app.use(express.static('../public'));
 
@@ -24,6 +24,6 @@ io.on('connection', (socket) => {
    });
 });
 
-server.listen(3000, () => {
+server.listen(3000, '0.0.0.0', () => {
     console.log('listening on *:3000');
 });
