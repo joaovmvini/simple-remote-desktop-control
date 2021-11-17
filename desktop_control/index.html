@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Desktop Control</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-size: 15px;
+    }
+
+    body, html {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        height: 100vh;
+        background-color: black;
+    }
+
+    #screen_view {
+        width: 760px;
+        height: 480px;
+        background-size: 100% 100%;
+        position: relative;
+    }
+
+    #pointer {
+        width: 5px;
+        height: 5px;
+        background-color: red;
+        position: absolute;
+        border-radius: 50%;
+    }
+
+</style>
+<body>
+    <div id="screen_view">
+        <div id="pointer"></div>
+    </div>
+</body>
+<script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
+<script>
+    (function main() {
+        const viewer_element = document.getElementById('screen_view');
+        const pointer = document.getElementById('pointer');
+
+        const viewerDimensions = {
+            width: viewer_element.clientWidth,
+            height: viewer_element.clientHeight
+        };
+
+        const realDimensions = {
+            width: null,
+            height: null
+        };
+
+        const mouseState = {
+            x: 0,
+            y: 0
+        };
+
+        const socket = io();
+
+        socket.on('SCREEN_DIMENSIONS', (dimensions) => {
+            realDimensions.width = dimensions.width;
+            realDimensions.height = dimensions.height;
+        });
+
+        socket.on('SCREEN_IMAGE', (content) => {
+            viewer_element.style.backgroundImage = `url(${content.data})`;
+        });
+
+        socket.on('MOUSE_MOVE', (event) => {
+            mouseState.x = (event.x * viewerDimensions.width) / realDimensions.width;
+            mouseState.y = (event.y * viewerDimensions.height) / realDimensions.height;
+            
+            pointer.style.left = (mouseState.x - 5) + 'px';
+            pointer.style.top = (mouseState.y - 5) + 'px';
+        });
+    })()
+</script>
+</html>
