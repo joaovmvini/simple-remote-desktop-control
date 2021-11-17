@@ -20,7 +20,7 @@
         align-items: center;
         width: 100vw;
         height: 100vh;
-        background-color: black;
+        background-color: #1f2440;
     }
 
     #screen_view {
@@ -45,44 +45,7 @@
     </div>
 </body>
 <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
-<script>
-    (function main() {
-        const viewer_element = document.getElementById('screen_view');
-        const pointer = document.getElementById('pointer');
-
-        const viewerDimensions = {
-            width: viewer_element.clientWidth,
-            height: viewer_element.clientHeight
-        };
-
-        const realDimensions = {
-            width: null,
-            height: null
-        };
-
-        const mouseState = {
-            x: 0,
-            y: 0
-        };
-
-        const socket = io();
-
-        socket.on('SCREEN_DIMENSIONS', (dimensions) => {
-            realDimensions.width = dimensions.width;
-            realDimensions.height = dimensions.height;
-        });
-
-        socket.on('SCREEN_IMAGE', (content) => {
-            viewer_element.style.backgroundImage = `url(${content.data})`;
-        });
-
-        socket.on('MOUSE_MOVE', (event) => {
-            mouseState.x = (event.x * viewerDimensions.width) / realDimensions.width;
-            mouseState.y = (event.y * viewerDimensions.height) / realDimensions.height;
-            
-            pointer.style.left = (mouseState.x - 5) + 'px';
-            pointer.style.top = (mouseState.y - 5) + 'px';
-        });
-    })()
-</script>
+<script src="/viewerMouse.js"></script>
+<script src="/socket.js"></script>
+<script src="/main.js"></script>
 </html>
