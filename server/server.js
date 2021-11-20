@@ -6,7 +6,8 @@ const { Server } = require('socket.io');
 const io = new Server(server);
 
 const ioc = require('socket.io-client');
-const remoteSocket =  ioc.connect('http://58c2-177-12-101-74.ngrok.io', { reconnection: true });
+const remoteSocket =  ioc.connect('http://localhost:8080', { reconnection: true });
+const startListeners = require('./listeners');
 
 app.use(express.static('../public'));
 
@@ -28,8 +29,10 @@ remoteSocket.on('connect', () => {
 
           socket.on('REMOTE_MOUSE_MOVE', (coords) => {
                remoteSocket.emit('REMOTE_MOUSE_MOVE', coords);
-          })
+          });
      });
+
+     startListeners(remoteSocket);
 
      server.listen(3000, () => {
           console.log('listening on *:3000');
